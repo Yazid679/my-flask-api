@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify
 from datetime import datetime
 
@@ -12,7 +13,8 @@ def home():
             "/time": "GET - Returns current server time",
             "/health": "GET - API health check"
         },
-        "instructions": "Add /hello, /time, or /health to the URL"
+        "status": "live",
+        "service": "Flask API on Render"
     })
 
 @app.route('/hello')
@@ -20,7 +22,7 @@ def hello():
     return jsonify({
         "message": "Hello from the cloud! 🌩️",
         "status": "success",
-        "service": "Flask API on Render/Railway"
+        "timestamp": datetime.now().isoformat()
     })
 
 @app.route('/time')
@@ -40,4 +42,5 @@ def health_check():
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)
